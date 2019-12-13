@@ -1,9 +1,29 @@
 package java_tools;
 
 import java.io.PrintStream;
+import java.util.LinkedHashSet;
 
 public class argOpts {
 
+	//	constructor with file with argOptTable
+	//	split into LinkedHashSet<String> optTable = new LinkedHashSet<String>();
+	//	BufferedReader reader = new BufferedReader(new FileReader(filename));
+	//	while(String line = reader.readLine()) {
+	//		if (line.indexOf("in") >= 0) {
+	//			String[] fields = line.split(":");
+	//			System.out.println(fields[2]);
+	//		}
+	//	}
+	//	parse args :
+	//		- loop into flags by key
+	//		- loop into flags by keywords
+	//		- loop into values
+	//	fill LinkedHashSet<String> options = new LinkedHashSet<String>();
+	
+	//	display usage
+	//	display options
+	
+	
 	public static boolean argOpt(String[] pArgs) {
 		String buffer="";
 		//File file = null;
@@ -129,7 +149,5 @@ public class argOpts {
 		ps.println("	-t, --tours <toursMax>	set maximum total tours before quit game");
 		ps.println("	-h, --help				Prints this help message and exits");
 	}
-
-
 	
 }
