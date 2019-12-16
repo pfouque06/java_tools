@@ -1,10 +1,13 @@
 package java_tools;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
@@ -22,14 +25,45 @@ public class getOpts {
 	public getOpts() {
 		if (setOptionTable())
 			setIndex();
-		System.err.println("getOpts Error");
+		else
+			System.err.println("getOpts Error");
 	}
 
 	public getOpts(String pFilename) {
 		optionFilename = pFilename;
 		if (setOptionTable())
 			setIndex();
-		System.err.println("getOpts Error");
+		else
+			System.err.println("getOpts Error");
+	}
+
+	public getOpts(String[] pOptions) {
+		BufferedWriter writer;
+		String workingDir = new File("").getAbsolutePath();
+		try {
+			File fileTable=new File(workingDir + "/" + optionFilename);
+			fileTable.createNewFile();
+			if (!fileTable.exists()) {
+				System.err.println("file "+optionFilename+" can't be created");
+				System.exit(1);
+			}
+			
+			writer = new BufferedWriter(new FileWriter(optionFilename, StandardCharsets.UTF_8));
+			for (String line : pOptions) {
+				writer.write(line);
+				writer.newLine();
+			}
+			writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			//writer.close();
+		}
+		if (setOptionTable())
+			setIndex();
+		else
+			System.err.println("getOpts Error");
 	}
 
 	void setOptionsFilename(String pFilename) {
@@ -39,8 +73,6 @@ public class getOpts {
 	public String getOptionsFilename() {
 		return optionFilename;
 	}
-
-
 
 	// optionTable mgt
 	boolean setOptionTable() {
@@ -52,30 +84,22 @@ public class getOpts {
 		BufferedReader reader;
 		try {
 			String workingDir = new File("").getAbsolutePath();
-			//System.out.println("> workingDir" + workingDir);
 			//File projectDir = new File(getOpts.class.getProtectionDomain()
-			//		.getCodeSource()
-			//		.getLocation()
-			//		.getPath());
-			//System.out.println("> projectDir.getName()" + projectDir.getName());
-			//System.out.println("> projectDir.getAbsolutePath()" + projectDir.getPath());
-			//System.out.println("> projectDir.getAbsolutePath()" + projectDir.getAbsolutePath());
+			// .getCodeSource() // .getLocation() // .getPath());
+			// projectDir.getName()); // projectDir.getPath()); // projectDir.getAbsolutePath());
 			File fileTable=new File(workingDir + "/" + optionFilename);
 			if (!fileTable.exists()) {
-				System.out.println("le fichier "+optionFilename+" n'existe pas");
+				System.err.println("le fichier "+optionFilename+" n'existe pas");
 				fileTable=new File(optionFilenameAlt);
 				if (!fileTable.exists()) {
-					System.out.println("le fichier "+optionFilenameAlt+" n'existe pas");
+					System.err.println("le fichier "+optionFilenameAlt+" n'existe pas");
 					System.exit(1);
 				}
 			}
-			System.out.println("> Nom du fichier    : "+fileTable.getName());
-			System.out.println("> Chemin du fichier : "+fileTable.getPath());
-			System.out.println("> Chemin absolu     : "+fileTable.getAbsolutePath());
+			// fileTable.getName()); // fileTable.getPath()); // fileTable.getAbsolutePath());
 
 			reader = new BufferedReader(new FileReader(optionFilename));
 			while ( (line = reader.readLine()) != null ) {
-				//System.out.println("line="+line);
 				// exclude comment and keep header line : TYPE:KEY:KEYWORD:VALUE:DETAIL:ACTION
 				if ( ! line.matches("^#.*") ) { 
 					//split line ins String[]
@@ -135,7 +159,8 @@ public class getOpts {
 				indexAction = i;
 				break;
 			}
-		}	}
+		}
+	}
 
 	// optionList mgt
 	public boolean setOptionList(String[] pArgs) {
@@ -157,16 +182,16 @@ public class getOpts {
 		// loop on args
 		for (int i = 0; i < pArgs.length; i++) {
 			boolean found= false;
-			System.out.println("i="+i);
+			//System.out.println("i="+i);
 			// loop on optionTable entries
 			// check if options is key type
 			if ( pArgs[i].matches("^-[a-z]+$")) {
-				for (int argID = 1; argID < pArgs[i].length(); argID++) {
+				int argLength = pArgs[i].length();
+				for (int argID = 1; argID < argLength; argID++) {
 					found = false;
-					System.out.println("argID="+argID);
 					String keyID = pArgs[i].substring(argID,argID+1);
-					System.out.println("setOptionList-3.1 : pArgs["+i+"]="+pArgs[i]+" keyID="+ keyID + " argID=" + argID);
-					
+					//System.out.println("setOptionList-3.1 : pArgs["+i+"]="+pArgs[i]+" length="+ argLength +" keyID="+ keyID + " argID=" + argID);
+
 					for ( String[] entry : optionTable ) {
 						String type = entry[indexType];
 						String key = entry[indexKey];
@@ -175,23 +200,21 @@ public class getOpts {
 						String valueType = entry[indexValueType];
 						String action = entry[indexAction];
 						//System.out.println("setOptionList-3.1 "+ type + " " + key + " " + keyword + " " + valueName + " " + valueType + " " + action );
-						
+
 						// check key against arg>keyId
 						if ( keyID.equals(key)) {
-							//System.out.println("setOptionList-3.1.1 ");
 							// check flag type
 							if ( type.matches("F") ) {
-								System.out.println("setOptionList-3.1.1 - found : "+ type + " " + key + " " + keyword + " " + valueName + " " + valueType + " " + action );
+								//System.out.println("setOptionList-3.1.1 - found : "+ type + " " + key + " " + keyword + " " + valueName + " " + valueType + " " + action );
 								String[] buffer = {type, key, valueName, action};
 								optionList.add(buffer);
 								found = true;
 							}
-							
+
 							// check value type
 							else if ( type.matches("V") ) {
-								//System.out.println("setOptionList-3.1.2");
 								if (pArgs[i].length() > 2 ) {
-									System.err.println("Error: arg -"+key+" should be isolated from other flags like arg["+i+"]=" + pArgs[i]);
+									System.err.println("Error: flag -"+key+" should be isolated from other flags unlike " + pArgs[i]);
 									//usage(System.err);
 									return false;
 								}
@@ -200,20 +223,21 @@ public class getOpts {
 									//usage(System.err);
 									return false;
 								}
-								String value = pArgs[++i];
+								String value = pArgs[i+1];
 								if ( ! value.matches("\\d+")) {
 									System.err.println("Error: value \"" + value + "\" for option -" + key + " must be a number");
 									//usage(System.err);
 									return false;
 								}
-								System.out.println("setOptionList-3.1.2 - found : "+ type + " " + key + " " + keyword + " " + valueName + " " + valueType + " " + value );
+								//System.out.println("setOptionList-3.1.2 - found : "+ type + " " + key + " " + keyword + " " + valueName + " " + valueType + " " + value );
 								String[] buffer = {type, key, valueName, value}; 
 								optionList.add(buffer);
-								argID++; found = true;
+								argID = pArgs[i++].length();
+								found = true;
 							}
 						}
 					}
-					System.out.println("argID="+argID);
+					//System.out.println("argID="+argID);
 					if ( ! found ) {
 						System.err.println("Error:" + /*" arg["+i+"] = "+pArgs[i] + " ->" +*/" -" + keyID + " is an unknown flag argument");
 						//usage(System.err);
@@ -235,15 +259,15 @@ public class getOpts {
 					// check keyword against arg
 					if ( pArgs[i].matches("^--"+keyword+"$")) {
 						//System.out.println("setOptionList-3.2");
-						
+
 						// check flag type
 						if ( type.matches("F") ) {
-							System.out.println("setOptionList-3.2.1 - found : "+ type + " " + key + " " + keyword + " " + valueName + " " + valueType + " " + action );
+							//System.out.println("setOptionList-3.2.1 - found : "+ type + " " + key + " " + keyword + " " + valueName + " " + valueType + " " + action );
 							String[] buffer = {type, key, valueName, action};
 							optionList.add(buffer);
 							found = true;
 						}
-		
+
 						// check value type
 						else if ( type.matches("V") ) {
 							//System.out.println("setOptionList-3.2.2");
@@ -258,7 +282,7 @@ public class getOpts {
 								//usage(System.err);
 								return false;
 							}
-							System.out.println("setOptionList-3.2.2 - found : "+ type + " " + key + " " + keyword + " " + valueName + " " + valueType + " " + value );
+							//System.out.println("setOptionList-3.2.2 - found : "+ type + " " + key + " " + keyword + " " + valueName + " " + valueType + " " + value );
 							String[] buffer = {type, key, valueName, value}; 
 							optionList.add(buffer);
 							found = true;
@@ -266,14 +290,14 @@ public class getOpts {
 					}
 				}
 			}
-			System.out.println("i="+i);
+			//System.out.println("i="+i);
 			if ( ! found ) {
-				System.err.println("Error: arg["+i+"] = "  + pArgs[i] + " is an unknown argument");
+				System.err.println("Error: "  + pArgs[i] + " is an unknown argument");
 				//usage(System.err);
 				return false;
 			}
 		}
-		
+
 		//System.out.println("setOptionList-end");
 		return true;
 	}
@@ -296,13 +320,15 @@ public class getOpts {
 	// get program usage
 	public void getUsage(PrintStream ps) {
 		String usage= "", help = "";
-		ps.println("Usage: application [-<flags>] [--<keyword>] [[-<flag>|--<keyword>]|--option <value>]");
+
+		ps.println();
+		ps.println("Usage: application [-<flags>] [--<keyword>] [[-<flag>|--<keyword>] <value>]");
 		ps.println("Options:");
-		
+
 		for (String[] fields : optionTable) {
 			if ( ! fields[indexKey].equals("KEY")) {
-				usage = "\t-"+ fields[indexKey] + ", --" + fields[indexKeyword] + " <"+fields[indexValue]+">"; 
-				usage += "\t-"+ fields[indexDetail];
+				usage =  String.format("\t-%s, --%-21s", fields[indexKey], fields[indexKeyword] + " <"+fields[indexValue]+">");
+				usage += "\t"+ fields[indexDetail];
 
 				if (fields[indexKey].equals("h"))
 					help = usage;
@@ -310,7 +336,7 @@ public class getOpts {
 					ps.println(usage);			
 			}
 		}
-		
+
 		ps.println();
 		ps.println(help);
 	}
