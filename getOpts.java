@@ -42,11 +42,13 @@ public class getOpts {
 		String workingDir = new File("").getAbsolutePath();
 		try {
 			File fileTable=new File(workingDir + "/" + optionFilename);
+			//System.out.println("option path="+fileTable.getAbsolutePath());
 			fileTable.createNewFile();
 			if (!fileTable.exists()) {
 				System.err.println("file "+optionFilename+" can't be created");
 				System.exit(1);
 			}
+			fileTable.deleteOnExit();
 			
 			writer = new BufferedWriter(new FileWriter(optionFilename, StandardCharsets.UTF_8));
 			for (String line : pOptions) {
@@ -54,16 +56,16 @@ public class getOpts {
 				writer.newLine();
 			}
 			writer.close();
+			if (setOptionTable())
+				setIndex();
+			else
+				System.err.println("getOpts Error");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			//writer.close();
 		}
-		if (setOptionTable())
-			setIndex();
-		else
-			System.err.println("getOpts Error");
 	}
 
 	void setOptionsFilename(String pFilename) {
@@ -195,9 +197,9 @@ public class getOpts {
 					for ( String[] entry : optionTable ) {
 						String type = entry[indexType];
 						String key = entry[indexKey];
-						String keyword = entry[indexKeyword];
+						//String keyword = entry[indexKeyword];
 						String valueName = entry[indexValue];
-						String valueType = entry[indexValueType];
+						//String valueType = entry[indexValueType];
 						String action = entry[indexAction];
 						//System.out.println("setOptionList-3.1 "+ type + " " + key + " " + keyword + " " + valueName + " " + valueType + " " + action );
 
@@ -253,7 +255,7 @@ public class getOpts {
 					String key = entry[indexKey];
 					String keyword = entry[indexKeyword];
 					String valueName = entry[indexValue];
-					String valueType = entry[indexValueType];
+					//String valueType = entry[indexValueType];
 					String action = entry[indexAction];
 
 					// check keyword against arg
