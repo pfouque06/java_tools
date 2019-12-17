@@ -50,7 +50,7 @@ public class getOpts {
 			}
 			fileTable.deleteOnExit();
 			
-			writer = new BufferedWriter(new FileWriter(optionFilename, StandardCharsets.UTF_8));
+			writer = new BufferedWriter(new FileWriter(optionFilename));
 			for (String line : pOptions) {
 				writer.write(line);
 				writer.newLine();
