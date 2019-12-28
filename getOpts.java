@@ -14,7 +14,7 @@ import java.util.LinkedList;
 public class getOpts {
 
 	String optionFilename = "getOptsTable.txt"; // default filename for getoptsTable definition
-	String optionFilenameAlt = "src/_666_/getOptsTable.txt"; // default filename for getoptsTable definition
+	String optionFilenameAlt = "src/_666_/getOptsTable.txt"; // default filename for getoptsTable definition within Eclipse IDE
 
 	int indexType=-1, indexKey=-1, indexKeyword=-1, indexValue=-1, indexValueType=-1, indexDetail=-1, indexAction=-1;
 	LinkedHashSet<String[]> optionList = new LinkedHashSet<String[]>();
