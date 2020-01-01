@@ -11,6 +11,46 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
+// getOpts class to parse Command Lien arguments
+// must be used with an option Table such as :
+// static String[] optionArray = {
+//		"##### DO NOT FORGET FOLLOWING HEADER LINE !! #####",
+//		"TYPE:KEY:KEYWORD:VALUENAME:VALUETYPE:DETAIL:ACTION:",
+//		"F:h:help:usage:-:prints this help message:true:",
+//		"F:a:auto:autoMode:boolean:set auto mode with random roulette (default is OFF):true:",
+//		"F:c:color:colorMode:boolean:set color mode (default is color):true:",
+//		"F:m:mono:colorMode:boolean:set monocolor mode (default is color):false:",
+//		"V:d:deposit:deposit:int:set jetons for deposit required to start a game (default is 0):-:",
+//		"V:w:warning:jetonWarning:int:set warning spent before alerting per phase (default is 200):-:",
+//		"V:j:jeton:jetonMax:int:set maximum spent to quit game:-:",
+//		"V:p:phase:phaseMax:int:set maximum phase to quit game:-:",
+//		"V:t:tour:tourMax:int:set maximum total tours to quit game:-:",
+//		"V:g:gain:gainMax:int:set maximum total gain to quit game:-:",
+//		"V:b:bet:betMax:int:set maximum bets allowed per tour:-:",
+//		};
+//
+//	public static void main(String[] args) {
+//		// TODO Auto-generated method stub
+//
+//		// parse args :
+//		// initiate getOpts class and parse args according to file getOptsTable.txt
+//		// (default)
+//		// getOpts options = new getOpts();
+//		// //System.out.println("optionTable=\n"+options.optionTable_toString());
+//
+//		getOpts options = new getOpts(optionArray); // System.out.println("optionTable=\n"+options.optionTable_toString());
+//		if (!options.setOptionList(args)) {
+//			options.getUsage(System.out); // use STDOUT when help is requested
+//			return;
+//		}
+//
+//		// System.out.println("optionList=\n"+options.optionList_toString());
+//		if (!setOpts(options.getOptionList())) {
+//			options.getUsage(System.out); // use STDOUT when help is requested
+//			return;
+//		}
+//	}
+
 public class getOpts {
 
 	private String optionFilename = "getOptsTable.txt"; // default filename for getoptsTable definition
