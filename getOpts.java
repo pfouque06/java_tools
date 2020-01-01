@@ -24,18 +24,18 @@ public class getOpts {
 
 	// constructor
 	public getOpts() {
-		if (setOptionTable())
-			setIndex();
-		else
-			System.err.println("getOpts Error");
+		if (!setOptionTable())
+			System.err.println("getOpts Error : setOptionTable() can't set optionTable");
+		if (!setIndex())
+			System.err.println("getOpts Error : setIndex() can't find Header Line for index settings");
 	}
 
 	public getOpts(String pFilename) {
 		optionFilename = pFilename;
-		if (setOptionTable())
-			setIndex();
-		else
-			System.err.println("getOpts Error");
+		if (!setOptionTable())
+			System.err.println("getOpts Error : setOptionTable() can't set optionTable");
+		if (!setIndex())
+			System.err.println("getOpts Error : setIndex() can't find Header Line for index settings");
 	}
 
 	public getOpts(String[] pOptions) {
@@ -57,10 +57,12 @@ public class getOpts {
 				writer.newLine();
 			}
 			writer.close();
-			if (setOptionTable())
-				setIndex();
-			else
-				System.err.println("getOpts Error");
+
+			if (!setOptionTable())
+				System.err.println("getOpts Error : setOptionTable() can't set optionTable");
+			if (!setIndex())
+				System.err.println("getOpts Error : setIndex() can't find Header Line for index settings");
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -139,7 +141,7 @@ public class getOpts {
 	}
 
 	// index mgt
-	private void setIndex() {
+	private boolean setIndex() {
 
 		// get index of cell TYPE, KEY, KEYWORD, ACTION in optionTable[0]
 		String[] header = optionTable.getFirst();
@@ -168,6 +170,7 @@ public class getOpts {
 				break;
 			}
 		}
+		return checkIndex();
 	}
 
 	private boolean checkIndex() {
@@ -189,12 +192,9 @@ public class getOpts {
 
 		// System.out.println("setOptionList-2.0");
 		// check all index
-		if (!checkIndex()) {
-			setIndex();
-			if (!checkIndex()) {
-				System.err.println("Error: index are missing in getOps parsing process");
-				return false;
-			}
+		if (!setIndex()) {
+			System.err.println("Error: index are missing in getOps parsing process");
+			return false;
 		}
 
 		// System.out.println("setOptionList-3.0");
@@ -351,12 +351,9 @@ public class getOpts {
 		String usage = "", help = "";
 
 		// check all index
-		if (!checkIndex()) {
-			setIndex();
-			if (!checkIndex()) {
-				System.err.println("Error: index are missing in getOps parsing process");
-				return;
-			}
+		if (!setIndex()) {
+			System.err.println("Error: index are missing in getOps parsing process");
+			return;
 		}
 
 		ps.println();
