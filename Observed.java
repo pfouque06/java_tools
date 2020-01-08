@@ -1,4 +1,4 @@
-package java_tools;
+package javaTools;
 
 public interface Observed {
 	public void addObserver(Observer obs);

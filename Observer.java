@@ -1,4 +1,4 @@
-package java_tools;
+package javaTools;
 
 import java.util.LinkedHashSet;
 

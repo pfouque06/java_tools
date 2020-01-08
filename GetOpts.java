@@ -1,4 +1,4 @@
-package java_tools;
+package javaTools;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -136,7 +136,7 @@ import java.util.LinkedList;
 //	}
 */
 
-public class getOpts {
+public class GetOpts {
 
 	private String optionFilename = "getOptsTable.txt"; // default filename for getoptsTable definition
 	private String optionFilenameAlt = "src/_666_/getOptsTable.txt"; // default filename for getoptsTable definition
@@ -148,14 +148,14 @@ public class getOpts {
 	private LinkedList<String[]> optionTable = new LinkedList<String[]>();
 
 	// constructor
-	public getOpts() {
+	public GetOpts() {
 		if (!setOptionTable())
 			System.err.println("getOpts Error : setOptionTable() can't set optionTable");
 		if (!setIndex())
 			System.err.println("getOpts Error : setIndex() can't find Header Line for index settings");
 	}
 
-	public getOpts(String pFilename) {
+	public GetOpts(String pFilename) {
 		optionFilename = pFilename;
 		if (!setOptionTable())
 			System.err.println("getOpts Error : setOptionTable() can't set optionTable");
@@ -163,7 +163,7 @@ public class getOpts {
 			System.err.println("getOpts Error : setIndex() can't find Header Line for index settings");
 	}
 
-	public getOpts(String[] pOptions) {
+	public GetOpts(String[] pOptions) {
 		BufferedWriter writer;
 		String workingDir = new File("").getAbsolutePath();
 		try {
