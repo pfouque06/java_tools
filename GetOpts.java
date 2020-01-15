@@ -329,7 +329,7 @@ public class GetOpts {
 			// System.out.println("i="+i);
 			// loop on optionTable entries
 			// check if options is key type
-			if (pArgs[i].matches("^-[a-z]+$")) {
+			if (pArgs[i].matches("^-[a-zA-Z]+$")) {
 				int argLength = pArgs[i].length();
 				for (int argID = 1; argID < argLength; argID++) {
 					found = false;
@@ -398,7 +398,7 @@ public class GetOpts {
 			}
 
 			// check if options is keyword type
-			else if (pArgs[i].matches("^--[a-z]+$")) {
+			else if (pArgs[i].matches("^--[a-zA-Z]+$")) {
 				for (String[] entry : optionTable) {
 					String type = entry[indexType];
 					String key = entry[indexKey];
