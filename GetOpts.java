@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -164,8 +165,16 @@ public class GetOpts {
 	}
 
 	public GetOpts(String[] pOptions) {
+		
 		BufferedWriter writer;
 		String workingDir = new File("").getAbsolutePath();
+		//URL resource = Fenetre.class.getResource("/");
+		//String resourceDir = GetOpts.class.getResource("/").getPath();
+		String resourceDir = this.getClass().getResource("/").getPath();
+		//System.out.println("resource.getPath(): "+resource.getPath());
+		String classPath = resourceDir.substring(0, resourceDir.lastIndexOf("/bin"));
+		System.out.println("classPath: "+classPath);
+		
 		try {
 			File fileTable = new File(workingDir + "/" + optionFilename);
 			// System.out.println("option path="+fileTable.getAbsolutePath());
