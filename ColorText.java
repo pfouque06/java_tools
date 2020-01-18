@@ -1,6 +1,6 @@
-package java_tools;
+package javaTools;
 
-public class colorText {
+public class ColorText {
 	    // Reset
 	    public static final String RESET = "\033[0m";  // Text Reset
 

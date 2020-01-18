@@ -1,4 +1,4 @@
-package java_tools;
+package javaTools;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -7,11 +7,135 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
-public class getOpts {
+/*
+// getOpts class to parse Command Lien arguments
+// must be used with an option Table such as :
+//
+// static String[] optionArray = {
+//		"##### DO NOT FORGET FOLLOWING HEADER LINE !! #####",
+//		"TYPE:KEY:KEYWORD:VALUENAME:VALUETYPE:DETAIL:ACTION:",
+//		"F:h:help:usage:-:prints this help message:true:",
+//		"F:a:auto:autoMode:boolean:set auto mode with random roulette (default is OFF):true:",
+//		"F:c:color:colorMode:boolean:set color mode (default is color):true:",
+//		"F:m:mono:colorMode:boolean:set monocolor mode (default is color):false:",
+//		"V:d:deposit:deposit:int:set jetons for deposit required to start a game (default is 0):-:",
+//		"V:w:warning:jetonWarning:int:set warning spent before alerting per phase (default is 200):-:",
+//		"V:j:jeton:jetonMax:int:set maximum spent to quit game:-:",
+//		"V:p:phase:phaseMax:int:set maximum phase to quit game:-:",
+//		"V:t:tour:tourMax:int:set maximum total tours to quit game:-:",
+//		"V:g:gain:gainMax:int:set maximum total gain to quit game:-:",
+//		"V:b:bet:betMax:int:set maximum bets allowed per tour:-:",
+//		};
+// 	public static getOpts options = new getOpts(optionArray);
+//
+//	public static boolean setOpts(String[] pArgs) {
+//		//System.out.println("optionTable=\n"+options.optionTable_toString());
+//		//parse options pArgs
+//		if (!options.setOptionList(pArgs)) {
+//			System.out.println("Parsing error, please retry or use -h, --help to get usage ...");
+//			return false;
+//		}
+//		//System.out.println("optionList=\n"+options.optionList_toString());
+//		// set options
+//		if (!setOpts(options.getOptionList())) {
+//		options.getUsage(System.out); // use STDOUT when help is requested
+//		return false;
+//		}
+//		//System.out.println("options:" + optsToString());
+//		return true;
+//	}
+//
+//	public static boolean setOpts(LinkedHashSet<String[]> pList) {
+//		// Loop on each options of pList
+//		for (String[] fields : pList) {
+//			//System.out.println("fields="+fields.toString() );
+//			switch (fields[2]) {
+//			case "colorMode":
+//				colorMode = fields[3].equals("true");
+//				// System.out.println("colorMode=" + colorMode);
+//				break;
+//			case "autoMode":
+//				autoMode = fields[3].equals("true");
+//				// System.out.println("auto=" + auto);
+//				break;
+//			case "deposit":
+//				deposit += Integer.valueOf(fields[3]);
+//				// System.out.println("deposit=" + deposit);
+//				break;
+//			case "jetonWarning":
+//				warning = Integer.valueOf(fields[3]);
+//				// System.out.println("warning=" + warning);
+//				break;
+//			case "jetonMax":
+//				jetonLimite = Integer.valueOf(fields[3]);
+//				// System.out.println("jetonLimite=" + jetonLimite);
+//				break;
+//			case "phaseMax":
+//				phaseMax = Integer.valueOf(fields[3]);
+//				// System.out.println("phaseMax=" + phaseMax);
+//				break;
+//			case "tourMax":
+//				tourMax = Integer.valueOf(fields[3]);
+//				// System.out.println("tourMax=" + tourMax);
+//				break;
+//			case "gainMax":
+//				gainMax = Integer.valueOf(fields[3]);
+//				// System.out.println("gainMax=" + gainMax);
+//				break;
+//			case "betMax":
+//				betMax = Integer.valueOf(fields[3]);
+//				// System.out.println("betMax=" + betMax);
+//				break;
+//			default:
+//				System.err.println("Error: option > valuename unknown");
+//			case "usage":
+//				return false;
+//			}
+//		}
+//		if (warning == 0)
+//			warning = deposit / 2;
+//		return true;
+//	}
+//
+//	public static String optsToString() {
+//
+//		String buffer = "";
+//
+//		buffer += " auto: " + (autoMode ? c_green() + "ON" : c_red() + "OFF") + c_reset();
+//		buffer += " mode: " + (colorMode ? c_green() + "color" : c_red() + "mono") + c_reset();
+//		if (deposit > 0)
+//			buffer += " deposit: " + c_blue() + deposit + c_reset();
+//		if (warning > 0)
+//			buffer += " warning: " + c_blue() + warning + c_reset();
+//		if (jetonLimite > 0)
+//			buffer += " jetonLimite: " + c_blue() + jetonLimite + c_reset();
+//		if (betMax > 0)
+//			buffer += " betMax: " + c_blue() + betMax + c_reset();
+//		if (gainMax > 0)
+//			buffer += " gainMax: " + c_blue() + gainMax + c_reset();
+//		if (phaseMax > 0)
+//			buffer += " phaseMax: " + c_blue() + phaseMax + c_reset();
+//		if (tourMax > 0)
+//			buffer += " toursMax: " + c_blue() + tourMax + c_reset();
+//		return buffer;
+//	}
+//
+//	public static void main(String[] args) {
+//		// TODO Auto-generated method stub
+//
+//		// parse args :
+//		//initiate getOpts class and parse args according to optionArray
+//		if (!setOpts(args))
+//			return;
+//
+//		...
+//	}
+*/
+
+public class GetOpts {
 
 	private String optionFilename = "getOptsTable.txt"; // default filename for getoptsTable definition
 	private String optionFilenameAlt = "src/_666_/getOptsTable.txt"; // default filename for getoptsTable definition
@@ -23,14 +147,14 @@ public class getOpts {
 	private LinkedList<String[]> optionTable = new LinkedList<String[]>();
 
 	// constructor
-	public getOpts() {
+	public GetOpts() {
 		if (!setOptionTable())
 			System.err.println("getOpts Error : setOptionTable() can't set optionTable");
 		if (!setIndex())
 			System.err.println("getOpts Error : setIndex() can't find Header Line for index settings");
 	}
 
-	public getOpts(String pFilename) {
+	public GetOpts(String pFilename) {
 		optionFilename = pFilename;
 		if (!setOptionTable())
 			System.err.println("getOpts Error : setOptionTable() can't set optionTable");
@@ -38,9 +162,17 @@ public class getOpts {
 			System.err.println("getOpts Error : setIndex() can't find Header Line for index settings");
 	}
 
-	public getOpts(String[] pOptions) {
+	public GetOpts(String[] pOptions) {
+		
 		BufferedWriter writer;
 		String workingDir = new File("").getAbsolutePath();
+		//URL resource = Fenetre.class.getResource("/");
+		//String resourceDir = GetOpts.class.getResource("/").getPath();
+		String resourceDir = this.getClass().getResource("/").getPath();
+		//System.out.println("resource.getPath(): "+resource.getPath());
+		String classPath = resourceDir.substring(0, resourceDir.lastIndexOf("/bin"));
+		System.out.println("classPath: "+classPath);
+		
 		try {
 			File fileTable = new File(workingDir + "/" + optionFilename);
 			// System.out.println("option path="+fileTable.getAbsolutePath());
@@ -71,6 +203,7 @@ public class getOpts {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private void setOptionsFilename(String pFilename) {
 		optionFilename = pFilename;
 	}
@@ -204,7 +337,7 @@ public class getOpts {
 			// System.out.println("i="+i);
 			// loop on optionTable entries
 			// check if options is key type
-			if (pArgs[i].matches("^-[a-z]+$")) {
+			if (pArgs[i].matches("^-[a-zA-Z]+$")) {
 				int argLength = pArgs[i].length();
 				for (int argID = 1; argID < argLength; argID++) {
 					found = false;
@@ -273,7 +406,7 @@ public class getOpts {
 			}
 
 			// check if options is keyword type
-			else if (pArgs[i].matches("^--[a-z]+$")) {
+			else if (pArgs[i].matches("^--[a-zA-Z]+$")) {
 				for (String[] entry : optionTable) {
 					String type = entry[indexType];
 					String key = entry[indexKey];
@@ -335,9 +468,9 @@ public class getOpts {
 		String result = "";
 		for (String[] fields : optionList) {
 			// System.out.println("fields="+fields.toString() );
+			result += (result.isEmpty() ? "" : "\n");
 			for (String cell : fields)
 				result += cell + ":";
-			result += "\n";
 		}
 		return result;
 	}
