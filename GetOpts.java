@@ -7,8 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
@@ -205,6 +203,7 @@ public class GetOpts {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private void setOptionsFilename(String pFilename) {
 		optionFilename = pFilename;
 	}
