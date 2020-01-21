@@ -171,7 +171,7 @@ public class GetOpts {
 		String resourceDir = this.getClass().getResource("/").getPath();
 		//System.out.println("resource.getPath(): "+resource.getPath());
 		String classPath = resourceDir.substring(0, resourceDir.lastIndexOf("/bin"));
-		System.out.println("classPath: "+classPath);
+		//System.out.println("classPath: "+classPath);
 		
 		try {
 			File fileTable = new File(workingDir + "/" + optionFilename);
