@@ -75,6 +75,8 @@ public class Logger {
 	
 	public void close() {
 		this.logging("Closing logging ...");
-		this.handler.close();
+		if (this.handler != null)
+			this.handler.close();
+		return;
 	}
 }

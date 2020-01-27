@@ -11,13 +11,14 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
 /*
-// getOpts class to parse Command Lien arguments
+// GetOpts class to parse Command Lien arguments
 // must be used with an option Table such as :
 //
 // static String[] optionArray = {
 //		"##### DO NOT FORGET FOLLOWING HEADER LINE !! #####",
 //		"TYPE:KEY:KEYWORD:VALUENAME:VALUETYPE:DETAIL:ACTION:",
 //		"F:h:help:usage:-:prints this help message:true:",
+//		"F:L:log:logging:boolean:set logging mode (to console/terminal):true:",
 //		"F:a:auto:autoMode:boolean:set auto mode with random roulette (default is OFF):true:",
 //		"F:c:color:colorMode:boolean:set color mode (default is color):true:",
 //		"F:m:mono:colorMode:boolean:set monocolor mode (default is color):false:",
@@ -29,7 +30,7 @@ import java.util.LinkedList;
 //		"V:g:gain:gainMax:int:set maximum total gain to quit game:-:",
 //		"V:b:bet:betMax:int:set maximum bets allowed per tour:-:",
 //		};
-// 	public static getOpts options = new getOpts(optionArray);
+// 	public static GetOpts options = new GetOpts(optionArray);
 //
 //	public static boolean setOpts(String[] pArgs) {
 //		//System.out.println("optionTable=\n"+options.optionTable_toString());
@@ -61,7 +62,10 @@ import java.util.LinkedList;
 //				autoMode = fields[3].equals("true");
 //				// System.out.println("auto=" + auto);
 //				break;
-//			case "deposit":
+//			case "logging":
+//				logging = fields[3].equals("true");
+//				break;
+ //			case "deposit":
 //				deposit += Integer.valueOf(fields[3]);
 //				// System.out.println("deposit=" + deposit);
 //				break;
@@ -106,6 +110,8 @@ import java.util.LinkedList;
 //
 //		buffer += " auto: " + (autoMode ? c_green() + "ON" : c_red() + "OFF") + c_reset();
 //		buffer += " mode: " + (colorMode ? c_green() + "color" : c_red() + "mono") + c_reset();
+//		buffer += " mode: " + (logging ? c_green() + "ON" : c_red() + "OFF") + c_reset();
+//
 //		if (deposit > 0)
 //			buffer += " deposit: " + c_blue() + deposit + c_reset();
 //		if (warning > 0)
