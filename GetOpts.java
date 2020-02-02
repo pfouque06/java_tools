@@ -11,158 +11,142 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
 /*
-// getOpts class to parse Command Lien arguments
+// GetOpts class to parse Command Lien arguments
 // must be used with an option Table such as :
-//
-// static String[] optionArray = {
-//		"##### DO NOT FORGET FOLLOWING HEADER LINE !! #####",
-//		"TYPE:KEY:KEYWORD:VALUENAME:VALUETYPE:DETAIL:ACTION:",
-//		"F:h:help:usage:-:prints this help message:true:",
-//		"F:a:auto:autoMode:boolean:set auto mode with random roulette (default is OFF):true:",
-//		"F:c:color:colorMode:boolean:set color mode (default is color):true:",
-//		"F:m:mono:colorMode:boolean:set monocolor mode (default is color):false:",
-//		"V:d:deposit:deposit:int:set jetons for deposit required to start a game (default is 0):-:",
-//		"V:w:warning:jetonWarning:int:set warning spent before alerting per phase (default is 200):-:",
-//		"V:j:jeton:jetonMax:int:set maximum spent to quit game:-:",
-//		"V:p:phase:phaseMax:int:set maximum phase to quit game:-:",
-//		"V:t:tour:tourMax:int:set maximum total tours to quit game:-:",
-//		"V:g:gain:gainMax:int:set maximum total gain to quit game:-:",
-//		"V:b:bet:betMax:int:set maximum bets allowed per tour:-:",
-//		};
-// 	public static getOpts options = new getOpts(optionArray);
-//
-//	public static boolean setOpts(String[] pArgs) {
-//		//System.out.println("optionTable=\n"+options.optionTable_toString());
-//		//parse options pArgs
-//		if (!options.setOptionList(pArgs)) {
-//			System.out.println("Parsing error, please retry or use -h, --help to get usage ...");
-//			return false;
-//		}
-//		//System.out.println("optionList=\n"+options.optionList_toString());
-//		// set options
-//		if (!setOpts(options.getOptionList())) {
-//		options.getUsage(System.out); // use STDOUT when help is requested
-//		return false;
-//		}
-//		//System.out.println("options:" + optsToString());
-//		return true;
-//	}
-//
-//	public static boolean setOpts(LinkedHashSet<String[]> pList) {
-//		// Loop on each options of pList
-//		for (String[] fields : pList) {
-//			//System.out.println("fields="+fields.toString() );
-//			switch (fields[2]) {
-//			case "colorMode":
-//				colorMode = fields[3].equals("true");
-//				// System.out.println("colorMode=" + colorMode);
-//				break;
-//			case "autoMode":
-//				autoMode = fields[3].equals("true");
-//				// System.out.println("auto=" + auto);
-//				break;
-//			case "deposit":
-//				deposit += Integer.valueOf(fields[3]);
-//				// System.out.println("deposit=" + deposit);
-//				break;
-//			case "jetonWarning":
-//				warning = Integer.valueOf(fields[3]);
-//				// System.out.println("warning=" + warning);
-//				break;
-//			case "jetonMax":
-//				jetonLimite = Integer.valueOf(fields[3]);
-//				// System.out.println("jetonLimite=" + jetonLimite);
-//				break;
-//			case "phaseMax":
-//				phaseMax = Integer.valueOf(fields[3]);
-//				// System.out.println("phaseMax=" + phaseMax);
-//				break;
-//			case "tourMax":
-//				tourMax = Integer.valueOf(fields[3]);
-//				// System.out.println("tourMax=" + tourMax);
-//				break;
-//			case "gainMax":
-//				gainMax = Integer.valueOf(fields[3]);
-//				// System.out.println("gainMax=" + gainMax);
-//				break;
-//			case "betMax":
-//				betMax = Integer.valueOf(fields[3]);
-//				// System.out.println("betMax=" + betMax);
-//				break;
-//			default:
-//				System.err.println("Error: option > valuename unknown");
-//			case "usage":
-//				return false;
-//			}
-//		}
-//		if (warning == 0)
-//			warning = deposit / 2;
-//		return true;
-//	}
-//
-//	public static String optsToString() {
-//
-//		String buffer = "";
-//
-//		buffer += " auto: " + (autoMode ? c_green() + "ON" : c_red() + "OFF") + c_reset();
-//		buffer += " mode: " + (colorMode ? c_green() + "color" : c_red() + "mono") + c_reset();
-//		if (deposit > 0)
-//			buffer += " deposit: " + c_blue() + deposit + c_reset();
-//		if (warning > 0)
-//			buffer += " warning: " + c_blue() + warning + c_reset();
-//		if (jetonLimite > 0)
-//			buffer += " jetonLimite: " + c_blue() + jetonLimite + c_reset();
-//		if (betMax > 0)
-//			buffer += " betMax: " + c_blue() + betMax + c_reset();
-//		if (gainMax > 0)
-//			buffer += " gainMax: " + c_blue() + gainMax + c_reset();
-//		if (phaseMax > 0)
-//			buffer += " phaseMax: " + c_blue() + phaseMax + c_reset();
-//		if (tourMax > 0)
-//			buffer += " toursMax: " + c_blue() + tourMax + c_reset();
-//		return buffer;
-//	}
-//
-//	public static void main(String[] args) {
-//		// TODO Auto-generated method stub
-//
-//		// parse args :
-//		//initiate getOpts class and parse args according to optionArray
-//		if (!setOpts(args))
-//			return;
-//
-//		...
-//	}
+
+	static String[] optionArray = {
+		"##### DO NOT FORGET FOLLOWING HEADER LINE !! #####",
+		"TYPE:KEY:KEYWORD:VALUENAME:VALUETYPE:DETAIL:ACTION:",
+		"F:h:help:usage:-:prints this help message:true:",
+		"F:L:log:logging:boolean:set logging mode (to console/terminal):true:",
+		"F:a:auto:autoMode:boolean:set auto mode with random roulette (default is OFF):true:",
+		"F:c:color:colorMode:boolean:set color mode (default is color):true:",
+		"F:m:mono:colorMode:boolean:set monocolor mode (default is color):false:",
+		"V:d:deposit:deposit:int:set jetons for deposit required to start a game (default is 0):-:",
+		"V:w:warning:jetonWarning:int:set warning spent before alerting per phase (default is 200):-:",
+		"V:j:jeton:jetonMax:int:set maximum spent to quit game:-:",
+		"V:p:phase:phaseMax:int:set maximum phase to quit game:-:",
+		"V:t:tour:tourMax:int:set maximum total tours to quit game:-:",
+		"V:g:gain:gainMax:int:set maximum total gain to quit game:-:",
+		"V:b:bet:betMax:int:set maximum bets allowed per tour:-:",
+		};
+
+	public static boolean setOpts(LinkedHashSet<String[]> pList) {
+		// Loop on each options of pList
+		for (String[] fields : pList) {
+			//System.out.println("fields="+fields.toString() );
+			switch (fields[2]) {
+			case "colorMode":
+				colorMode = fields[3].equals("true");
+				// System.out.println("colorMode=" + colorMode);
+				break;
+			case "autoMode":
+				autoMode = fields[3].equals("true");
+				// System.out.println("auto=" + auto);
+				break;
+			case "logging":
+				logging = fields[3].equals("true");
+				break;
+			case "deposit":
+				deposit += Integer.valueOf(fields[3]);
+				// System.out.println("deposit=" + deposit);
+				break;
+			case "jetonWarning":
+				warning = Integer.valueOf(fields[3]);
+				// System.out.println("warning=" + warning);
+				break;
+			case "jetonMax":
+				jetonLimite = Integer.valueOf(fields[3]);
+				// System.out.println("jetonLimite=" + jetonLimite);
+				break;
+			case "phaseMax":
+				phaseMax = Integer.valueOf(fields[3]);
+				// System.out.println("phaseMax=" + phaseMax);
+				break;
+			case "tourMax":
+				tourMax = Integer.valueOf(fields[3]);
+				// System.out.println("tourMax=" + tourMax);
+				break;
+			case "gainMax":
+				gainMax = Integer.valueOf(fields[3]);
+				// System.out.println("gainMax=" + gainMax);
+				break;
+			case "betMax":
+				betMax = Integer.valueOf(fields[3]);
+				// System.out.println("betMax=" + betMax);
+				break;
+			default:
+				System.err.println("Error: option > valuename unknown");
+			case "usage":
+				return false;
+			}
+		}
+		if (warning == 0)
+			warning = deposit / 2;
+		return true;
+	}
+
+	public static String optsToString() {
+
+		String buffer = "";
+
+		buffer += " auto: " + (autoMode ? c_green() + "ON" : c_red() + "OFF") + c_reset();
+		buffer += " mode: " + (colorMode ? c_green() + "color" : c_red() + "mono") + c_reset();
+		buffer += " mode: " + (logging ? c_green() + "ON" : c_red() + "OFF") + c_reset();
+
+		if (deposit > 0)
+			buffer += " deposit: " + c_blue() + deposit + c_reset();
+		if (warning > 0)
+			buffer += " warning: " + c_blue() + warning + c_reset();
+		if (jetonLimite > 0)
+			buffer += " jetonLimite: " + c_blue() + jetonLimite + c_reset();
+		if (betMax > 0)
+			buffer += " betMax: " + c_blue() + betMax + c_reset();
+		if (gainMax > 0)
+			buffer += " gainMax: " + c_blue() + gainMax + c_reset();
+		if (phaseMax > 0)
+			buffer += " phaseMax: " + c_blue() + phaseMax + c_reset();
+		if (tourMax > 0)
+			buffer += " toursMax: " + c_blue() + tourMax + c_reset();
+		return buffer;
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		// initiate getOpts options and parse args :
+		options = new GetOpts(optionArray, args);
+
+		// set options according to args parsing
+		if (!setOpts(options.getOptionList())) {
+			System.out.println(options.getUsage()); // display usage is requested
+			return;
+		}
+		logger.logging("options:" + optsToString());
+
+		...
+	}
 */
 
 public class GetOpts {
 
+	private boolean status;
 	private String optionFilename = "getOptsTable.txt"; // default filename for getoptsTable definition
-	private String optionFilenameAlt = "src/_666_/getOptsTable.txt"; // default filename for getoptsTable definition
-
+	//private String optionFilenameAlt = "src/_666_/getOptsTable.txt"; // default filename for getoptsTable definition
 	private int indexType = -1, indexKey = -1, indexKeyword = -1, indexValue = -1, indexValueType = -1,
 			indexDetail = -1, indexAction = -1;
 	private LinkedHashSet<String[]> optionList = new LinkedHashSet<String[]>();
-
 	private LinkedList<String[]> optionTable = new LinkedList<String[]>();
 
 	// constructor
-	public GetOpts() {
-		if (!setOptionTable())
-			System.err.println("getOpts Error : setOptionTable() can't set optionTable");
-		if (!setIndex())
-			System.err.println("getOpts Error : setIndex() can't find Header Line for index settings");
-	}
-
-	public GetOpts(String pFilename) {
+	public GetOpts(String pFilename, String[] pArgs) {
 		optionFilename = pFilename;
-		if (!setOptionTable())
-			System.err.println("getOpts Error : setOptionTable() can't set optionTable");
-		if (!setIndex())
-			System.err.println("getOpts Error : setIndex() can't find Header Line for index settings");
+
+		// build options Table, check indexes and parse options pArgs
+		status = init(pArgs);
 	}
 
-	public GetOpts(String[] pOptions) {
+	public GetOpts(String[] pOptions, String[] pArgs) {
 		
 		BufferedWriter writer;
 		String workingDir = new File("").getAbsolutePath();
@@ -171,7 +155,7 @@ public class GetOpts {
 		String resourceDir = this.getClass().getResource("/").getPath();
 		//System.out.println("resource.getPath(): "+resource.getPath());
 		String classPath = resourceDir.substring(0, resourceDir.lastIndexOf("/bin"));
-		System.out.println("classPath: "+classPath);
+		//System.out.println("classPath: "+classPath);
 		
 		try {
 			File fileTable = new File(workingDir + "/" + optionFilename);
@@ -190,17 +174,37 @@ public class GetOpts {
 			}
 			writer.close();
 
-			if (!setOptionTable())
-				System.err.println("getOpts Error : setOptionTable() can't set optionTable");
-			if (!setIndex())
-				System.err.println("getOpts Error : setIndex() can't find Header Line for index settings");
+			// build options Table, check indexes and parse options pArgs
+			status = init(pArgs);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally {
-			// writer.close();
 		}
+	}
+
+	private boolean init(String[] pArgs) {
+
+		// build options Table
+		if (!setOptionTable()) {
+			System.err.println("getOpts Error : setOptionTable() can't set optionTable");
+			return false;
+		}
+		// check Index validity
+		if (!setIndex()) {
+			System.err.println("getOpts Error : setIndex() can't find Header Line for index settings");
+			return false;
+		}
+		// parse options pArgs
+		if (!setOptionList(pArgs)) {
+			System.err.println("getOpts Error : Parsing error, please retry or use -h, --help to get usage ...");
+			return false;
+		}
+		return true;
+	}
+
+	public boolean isEnabled() {
+		return status;
 	}
 
 	@SuppressWarnings("unused")
@@ -231,11 +235,12 @@ public class GetOpts {
 			File fileTable = new File(workingDir + "/" + optionFilename);
 			if (!fileTable.exists()) {
 				System.err.println("le fichier " + optionFilename + " n'existe pas");
-				fileTable = new File(optionFilenameAlt);
-				if (!fileTable.exists()) {
-					System.err.println("le fichier " + optionFilenameAlt + " n'existe pas");
-					System.exit(1);
-				}
+				// fileTable = new File(optionFilenameAlt);
+				// if (!fileTable.exists()) {
+				//	System.err.println("le fichier " + optionFilenameAlt + " n'existe pas");
+				//	System.exit(1);
+				// }
+				System.exit(1);
 			}
 			// fileTable.getName()); // fileTable.getPath()); //
 			// fileTable.getAbsolutePath());
@@ -342,8 +347,7 @@ public class GetOpts {
 				for (int argID = 1; argID < argLength; argID++) {
 					found = false;
 					String keyID = pArgs[i].substring(argID, argID + 1);
-					// System.out.println("setOptionList-3.1 : pArgs["+i+"]="+pArgs[i]+" length="+
-					// argLength +" keyID="+ keyID + " argID=" + argID);
+					//System.out.println("setOptionList-3.1 : pArgs["+i+"]="+pArgs[i]+" length="+ argLength +" keyID="+ keyID + " argID=" + argID);
 
 					for (String[] entry : optionTable) {
 						String type = entry[indexType];
@@ -352,15 +356,13 @@ public class GetOpts {
 						String valueName = entry[indexValue];
 						// String valueType = entry[indexValueType];
 						String action = entry[indexAction];
-						// System.out.println("setOptionList-3.1 "+ type + " " + key + " " + keyword + "
-						// " + valueName + " " + valueType + " " + action );
+						//System.out.println("setOptionList-3.1 "+ type + " " + key + " " + valueName + " " + action );
 
 						// check key against arg>keyId
 						if (keyID.equals(key)) {
 							// check flag type
 							if (type.matches("F")) {
-								// System.out.println("setOptionList-3.1.1 - found : "+ type + " " + key + " " +
-								// keyword + " " + valueName + " " + valueType + " " + action );
+								//System.out.println("setOptionList-3.1.1 - found : "+ type + " " + key + " " + valueName + " " + action );
 								String[] buffer = { type, key, valueName, action };
 								optionList.add(buffer);
 								found = true;
@@ -386,8 +388,7 @@ public class GetOpts {
 									// usage(System.err);
 									return false;
 								}
-								// System.out.println("setOptionList-3.1.2 - found : "+ type + " " + key + " " +
-								// keyword + " " + valueName + " " + valueType + " " + value );
+								//System.out.println("setOptionList-3.1.2 - found : "+ type + " " + key + " " + valueName + " " + value );
 								String[] buffer = { type, key, valueName, value };
 								optionList.add(buffer);
 								argID = pArgs[i++].length();
@@ -395,7 +396,7 @@ public class GetOpts {
 							}
 						}
 					}
-					// System.out.println("argID="+argID);
+					//System.out.println("argID="+argID);
 					if (!found) {
 						System.err.println("Error:" + /* " arg["+i+"] = "+pArgs[i] + " ->" + */" -" + keyID
 								+ " is an unknown flag argument");
@@ -421,8 +422,7 @@ public class GetOpts {
 
 						// check flag type
 						if (type.matches("F")) {
-							// System.out.println("setOptionList-3.2.1 - found : "+ type + " " + key + " " +
-							// keyword + " " + valueName + " " + valueType + " " + action );
+							//System.out.println("setOptionList-3.2.1 - found : "+ type + " " + key + " " + keyword + " " + valueName + " " + action );
 							String[] buffer = { type, key, valueName, action };
 							optionList.add(buffer);
 							found = true;
@@ -443,8 +443,7 @@ public class GetOpts {
 								// usage(System.err);
 								return false;
 							}
-							// System.out.println("setOptionList-3.2.2 - found : "+ type + " " + key + " " +
-							// keyword + " " + valueName + " " + valueType + " " + value );
+							//System.out.println("setOptionList-3.2.2 - found : "+ type + " " + key + " " + keyword + " " + valueName + " " + value );
 							String[] buffer = { type, key, valueName, value };
 							optionList.add(buffer);
 							found = true;
@@ -460,6 +459,7 @@ public class GetOpts {
 			}
 		}
 
+		// System.out.println(optionList_toString());
 		// System.out.println("setOptionList-end");
 		return true;
 	}
@@ -480,37 +480,38 @@ public class GetOpts {
 	}
 
 	// get program usage
-	public void getUsage(PrintStream ps) {
+	public String getUsage() {
 		String usage = "", help = "";
 
-		// check all index
+		// check all index are validated
 		if (!setIndex()) {
 			System.err.println("Error: index are missing in getOps parsing process");
-			return;
+			return usage;
 		}
 
-		ps.println();
-		ps.println("Usage: application [-<flags>] [--<keyword>] [[-<flag>|--<keyword>] <value>]");
-		ps.println("Options:");
+		usage += "Usage: application [-<flags>] [--<keyword>] [[-<flag>|--<keyword>] <value>]\n";
+		usage += "Options:\n";
 
 		for (String[] fields : optionTable) {
 			if (!fields[indexKey].equals("KEY")) {
+				String line = "";
 				if (fields[indexType].equals("F")) { // usage for flags
-					usage = String.format("\t-%s, --%-21s", fields[indexKey], fields[indexKeyword]);
+					line += String.format("\t-%s, --%-21s", fields[indexKey], fields[indexKeyword]);
 				} else { // usage for value options
-					usage = String.format("\t-%s, --%-21s", fields[indexKey],
+					line += String.format("\t-%s, --%-21s", fields[indexKey],
 							fields[indexKeyword] + " <" + fields[indexValue] + ">");
 				}
-				usage += "\t" + fields[indexDetail];
+				line += "\t" + fields[indexDetail] + "\n";
 				if (fields[indexKey].equals("h"))
-					help = usage;
+					help = line;
 				else
-					ps.println(usage);
+					usage += line;
 			}
 		}
 
-		ps.println();
-		ps.println(help);
+		usage += "\n";
+		usage += help;
+		return usage;
 	}
 
 }

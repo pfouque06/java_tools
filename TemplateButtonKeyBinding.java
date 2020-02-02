@@ -3,6 +3,8 @@ package javaTools;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -20,6 +22,17 @@ public class TemplateButtonKeyBinding {
 			public void run() {
 				final JFrame frame = new JFrame();
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		        // Add window listener by implementing WindowAdapter class to the frame instance.
+				// To handle the close event we just need to implement the windowClosing() method.
+				frame.addWindowListener(new WindowAdapter() {
+					@Override
+					public void windowClosing(WindowEvent e) {
+						System.out.println("frame.addWindowListener(WindowAdapter.windowClosing(" + e.getID() + "))");
+
+						// System.exit(0);
+					}
+				});
 
 				final JButton btn = new JButton("Button") {
 					@Override
