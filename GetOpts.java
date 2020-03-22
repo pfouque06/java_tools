@@ -111,7 +111,6 @@ import java.util.LinkedList;
 	}
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
 		// initiate getOpts options and parse args :
 		options = new GetOpts(optionArray, args);
@@ -146,19 +145,11 @@ public class GetOpts {
 	}
 
 	public GetOpts(String[] pOptions, String[] pArgs) {
-		
-		BufferedWriter writer;
-		String workingDir = new File("").getAbsolutePath();
-		//URL resource = Fenetre.class.getResource("/");
-		//String resourceDir = GetOpts.class.getResource("/").getPath();
-		String resourceDir = this.getClass().getResource("/").getPath();
-		//System.out.println("resource.getPath(): "+resource.getPath());
-		String classPath = resourceDir.substring(0, resourceDir.lastIndexOf("/bin"));
-		//System.out.println("classPath: "+classPath);
-		
+
 		try {
+			BufferedWriter writer;
+			String workingDir = PackageTools.getRunningDir();
 			File fileTable = new File(workingDir + "/" + optionFilename);
-			// System.out.println("option path="+fileTable.getAbsolutePath());
 			fileTable.createNewFile();
 			if (!fileTable.exists()) {
 				System.err.println("file " + optionFilename + " can't be created");
@@ -177,7 +168,6 @@ public class GetOpts {
 			status = init(pArgs);
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -223,14 +213,10 @@ public class GetOpts {
 			return false;
 
 		// System.out.println("setOptionDefs()-1.1");
-		String line;
-		BufferedReader reader;
 		try {
-			String workingDir = new File("").getAbsolutePath();
-			// File projectDir = new File(getOpts.class.getProtectionDomain()
-			// .getCodeSource() // .getLocation() // .getPath());
-			// projectDir.getName()); // projectDir.getPath()); //
-			// projectDir.getAbsolutePath());
+			String line;
+			BufferedReader reader;
+			String workingDir = PackageTools.getRunningDir();
 			File fileTable = new File(workingDir + "/" + optionFilename);
 			if (!fileTable.exists()) {
 				System.err.println("le fichier " + optionFilename + " n'existe pas");
@@ -258,7 +244,6 @@ public class GetOpts {
 			}
 			reader.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
