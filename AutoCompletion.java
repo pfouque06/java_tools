@@ -78,7 +78,6 @@ public class AutoCompletion<T> {
                 return false;
             }
         } catch (NoSuchFieldException | SecurityException e1) {
-            // TODO Auto-generated catch block
             System.out.println(">>> ERROR attribute " + candidateNameField + " is not present");
             return false;
         }
@@ -90,7 +89,6 @@ public class AutoCompletion<T> {
             }
             //System.out.println(">>> candidateSetField = " + candidateSetField + " is present and is a Set");
         } catch (NoSuchFieldException | SecurityException e1) {
-            // TODO Auto-generated catch block
             System.out.println(">>> ERROR attribute " + candidateSetField + " is not present");
             return false;
         }
@@ -107,7 +105,6 @@ public class AutoCompletion<T> {
             nameField.setAccessible(true);
             name = (String) nameField.get(inputItem);
         } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-            // TODO Auto-generated catch block
             System.out.println(">>> ERROR attribute " + candidateNameField + " cannot be catch");
             return null;
         }
@@ -122,7 +119,6 @@ public class AutoCompletion<T> {
             setField.setAccessible(true);
             occurrence = ((Set<?>) setField.get(inputItem)).size();
         } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-            // TODO Auto-generated catch block
             System.out.println(">>> ERROR attribute " + candidateSetField + " cannot be catch");
         }
         return occurrence;

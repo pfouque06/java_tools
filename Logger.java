@@ -47,13 +47,15 @@ public class Logger {
 
 	public void setHandler(String handler) {
 
+		if (handler == null) return;
+		// check if new handler is same as current
 		if (handler.equals(this.filename)) {
 			this.logging("Logging goes on with same handler -> " + this.filename + "...");
 			return;
 		}
-		if (!this.filename.isEmpty() || this.handler != null) {
-			this.close();
-		}
+		// close previous handler if not null
+		if ( this.handler != null) this.close();
+		// init new handler
 		this.init(handler);
 	}
 
