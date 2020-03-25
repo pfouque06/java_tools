@@ -4,9 +4,9 @@ public class Candidate implements Comparable<Object> {
 
 	private String name;
 	private Integer occurrence;
-	private Integer index;
+	private int index;
 
-	public Candidate(String name, Integer occurrence, Integer index) {
+	public Candidate(String name, Integer occurrence, int index) {
 		this.name = name;
 		this.occurrence = occurrence;
 		this.index = index;
@@ -19,12 +19,12 @@ public class Candidate implements Comparable<Object> {
 			Candidate candidateItem = (Candidate) o;
 
 			// reversed order comparator flag for occurrence
-			int compareOccurence = -this.occurrence.compareTo(candidateItem.getOccurrence());
+			int compareOccurrence = -this.occurrence.compareTo(candidateItem.getOccurrence());
 
 			// if both items have same occurrence value, we sort on item name
-			if (compareOccurence == 0)
+			if (compareOccurrence == 0)
 				return this.name.compareTo(candidateItem.getName());
-			return compareOccurence;
+			return compareOccurrence;
 		}
 		return -1;
 	}
@@ -45,11 +45,11 @@ public class Candidate implements Comparable<Object> {
 		this.occurrence = occurence;
 	}
 
-	public Integer getIndex() {
+	public int getIndex() {
 		return index;
 	}
 
-	public void setIndex(Integer index) {
+	public void setIndex(int index) {
 		this.index = index;
 	}
 

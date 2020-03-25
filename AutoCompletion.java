@@ -1,28 +1,38 @@
 package javaTools;
 
 import java.lang.reflect.Field;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class AutoCompletion<T> {
-
-    private Class<T> type;
-    private String candidateNameField;
-    private String candidateSetField;
 
     // const
     private static final long MAX_CANDIDATE_NUMBERS_WITHOUT_PREFIX = 5;
     private static final long MAX_CANDIDATE_NUMBERS = 5;
 
-    public AutoCompletion(Class<T> classType, String candidateNameField, String candidateSetField) {
+    private Class<T> type;
+    private String candidateStringField;
+    private String candidateOccurrenceField;
+    private OccurrenceFieldType candidateOccurrenceFieldType;
+    private enum OccurrenceFieldType {collection, number, primitive, other};
+    //private OccurrenceFieldNumberType candidateOccurrenceFieldNumberType;
+    //private enum OccurrenceFieldNumberType { INTEGER, LONG};
+    private long maxCandidateNumbersFull;
+    private long maxCandidateNumbers;
+
+    public AutoCompletion(Class<T> classType, String candidatStringField, String candidateOccurrenceField, long... maxCandidates) {
+        //this(classType, candidatStringField, candidateOccurrenceField);
         super();
 
-        System.out.println(">>> START AutoCompletion(classType: " + classType.getSimpleName() + ", candidateNameField: " + candidateNameField + ", candidateSetField: " + candidateSetField + ")");
+        System.out.println(">>> START AutoCompletion(classType: " + classType.getSimpleName() +
+                ", candidatStringField: " + candidatStringField +
+                ", candidateOccurrenceField: " + candidateOccurrenceField + ")");
         this.type = classType;
-        this.candidateNameField = candidateNameField;
-        this.candidateSetField = candidateSetField;
+        this.candidateStringField = candidatStringField;
+        this.candidateOccurrenceField = candidateOccurrenceField;
+        this.maxCandidateNumbers = maxCandidates.length > 0 ? maxCandidates[0] : MAX_CANDIDATE_NUMBERS;
+        this.maxCandidateNumbersFull = maxCandidates.length > 1 ? maxCandidates[1] : MAX_CANDIDATE_NUMBERS_WITHOUT_PREFIX;
+        System.out.println(">>> maxCandidateNumbers: " + this.maxCandidateNumbers + ", maxCandidateNumbersFull: " + this.maxCandidateNumbersFull);
 
         // unvalidate type if fields cannot be validated
         if (!validateFields()) {
@@ -63,7 +73,7 @@ public class AutoCompletion<T> {
                 .map(item -> {
                     return inputList.get(item.getIndex());
                 })
-                .limit(match.isEmpty() ? MAX_CANDIDATE_NUMBERS_WITHOUT_PREFIX : MAX_CANDIDATE_NUMBERS) // or candidates.size() for full list
+                .limit(match.isEmpty() ? maxCandidateNumbersFull : maxCandidateNumbers) // or candidates.size() for full list
                 .collect(Collectors.toList());
 
         return candidateItems;
@@ -73,23 +83,42 @@ public class AutoCompletion<T> {
 
         // check fields type
         try {
-            if (!type.getDeclaredField(candidateNameField).getType().getSimpleName().equals("String")) {
-                System.out.println(">>> ERROR attribute " + candidateNameField + " is not a String");
+            if (!type.getDeclaredField(candidateStringField).getType().getSimpleName().equals("String")) {
+                System.out.println(">>> ERROR attribute " + candidateStringField + " is not a String class type");
                 return false;
             }
+            System.out.println(">>> attribute " + candidateStringField + " is a a String class type");
         } catch (NoSuchFieldException | SecurityException e1) {
-            System.out.println(">>> ERROR attribute " + candidateNameField + " is not present");
+            System.out.println(">>> ERROR attribute " + candidateStringField + " is not present");
             return false;
         }
 
         try {
-            if (!type.getDeclaredField(candidateSetField).getType().getSimpleName().equals("Set")) {
-                System.out.println(">>> ERROR attribute " + candidateSetField + " is not a Set");
+            Field occurrenceField = type.getDeclaredField(candidateOccurrenceField);
+            Class<?> fieldType = occurrenceField.getType();
+            //System.out.println("occurrenceField type: " + fieldType );
+
+            if (isClassCollection(fieldType)) { // check if occurrence Field is Collection, a Map
+                System.out.println(">>> attribute " + candidateOccurrenceField +
+                        " is a Collection class type: " + fieldType.getSimpleName());
+                candidateOccurrenceFieldType = OccurrenceFieldType.collection;
+            } else if (isClassNumber(fieldType) && Integer.class.equals(fieldType)) { // check if occurrence Field is a Number
+                System.out.println(">>> attribute " + candidateOccurrenceField +
+                        " is an Integer Number class type: " + fieldType.getSimpleName());
+                candidateOccurrenceFieldType = OccurrenceFieldType.number;
+            } else if (fieldType.isPrimitive() && int.class.equals(fieldType)) { // check if occurrence Field is a primitive
+                System.out.println(">>> attribute " + candidateOccurrenceField +
+                        " is a int primitive class type: " + fieldType.getSimpleName());
+                candidateOccurrenceFieldType = OccurrenceFieldType.primitive;
+            } else {
+                System.out.println(">>> ERROR attribute " + candidateOccurrenceField +
+                        " is not a Collection, a Integer Number or a int primitive class type: " + fieldType.getSimpleName());
+                candidateOccurrenceFieldType = OccurrenceFieldType.other;
                 return false;
             }
             //System.out.println(">>> candidateSetField = " + candidateSetField + " is present and is a Set");
         } catch (NoSuchFieldException | SecurityException e1) {
-            System.out.println(">>> ERROR attribute " + candidateSetField + " is not present");
+            System.out.println(">>> ERROR attribute " + candidateOccurrenceField + " is not present");
             return false;
         }
 
@@ -101,11 +130,11 @@ public class AutoCompletion<T> {
         String name = "";
 
         try {
-            Field nameField = type.getDeclaredField(candidateNameField);
+            Field nameField = type.getDeclaredField(candidateStringField);
             nameField.setAccessible(true);
             name = (String) nameField.get(inputItem);
         } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-            System.out.println(">>> ERROR attribute " + candidateNameField + " cannot be catch");
+            System.out.println(">>> ERROR attribute " + candidateStringField + " cannot be catch");
             return null;
         }
         return name;
@@ -115,13 +144,46 @@ public class AutoCompletion<T> {
         Integer occurrence = null;
 
         try {
-            Field setField = type.getDeclaredField(candidateSetField);
-            setField.setAccessible(true);
-            occurrence = ((Set<?>) setField.get(inputItem)).size();
+            Field occurrenceField = type.getDeclaredField(candidateOccurrenceField);
+            occurrenceField.setAccessible(true);
+
+            switch (candidateOccurrenceFieldType) {
+                case collection:
+                    //occurrence = new Long(((Collection<?>) occurrenceField.get(inputItem)).size());
+                    occurrence = ((Collection<?>) occurrenceField.get(inputItem)).size();
+                    break;
+                case number:
+                case primitive:
+                    //occurrence = Long.valueOf((Integer) occurrenceField.get(inputItem));
+                    occurrence = (Integer) occurrenceField.get(inputItem);
+                    break;
+                default:
+                    System.out.println(">>> ERROR attribute " + candidateOccurrenceField + " is not a Collection or a Number class type");
+            }
         } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-            System.out.println(">>> ERROR attribute " + candidateSetField + " cannot be catch");
+            System.out.println(">>> ERROR attribute " + candidateOccurrenceField + " cannot be catch");
         }
         return occurrence;
+    }
+
+    // check iF object is a collection / a Map
+    public boolean isCollection(Object ob) {
+        //return ob instanceof Collection || ob instanceof Map;
+        return ob != null && isClassCollection(ob.getClass());
+    }
+
+    // check is Class is a collection / a Map class type
+    public boolean isClassCollection(Class c) {
+        return Collection.class.isAssignableFrom(c) || Map.class.isAssignableFrom(c);
+    }
+
+    public boolean isNumber(Object ob) {
+        //return ob instanceof Number;
+        return ob != null && isClassNumber(ob.getClass());
+    }
+
+    public boolean isClassNumber(Class cl) {
+        return Number.class.isAssignableFrom(cl);
     }
 
 }
